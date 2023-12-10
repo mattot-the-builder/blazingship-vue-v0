@@ -1,3 +1,42 @@
+<script lang="ts" setup>
+    import { computed, reactive } from 'vue';
+    import { useI18n } from 'vue-i18n';
+    import appSetting from '@/app-setting';
+    import { useAppStore } from '@/stores/index';
+    import { useRouter } from 'vue-router';
+    import { useMeta } from '@/composables/use-meta';
+    import { ref } from 'vue';
+    import { useAuthStore } from '../../stores/auth';
+
+    import IconCaretDown from '@/components/icon/icon-caret-down.vue';
+    import IconMail from '@/components/icon/icon-mail.vue';
+    import IconLockDots from '@/components/icon/icon-lock-dots.vue';
+    import IconInstagram from '@/components/icon/icon-instagram.vue';
+    import IconFacebookCircle from '@/components/icon/icon-facebook-circle.vue';
+    import IconTwitter from '@/components/icon/icon-twitter.vue';
+    import IconGoogle from '@/components/icon/icon-google.vue';
+
+    useMeta({ title: 'Login' });
+    const router = useRouter();
+    const store = useAppStore();
+    // multi language
+    const i18n = reactive(useI18n());
+    const changeLanguage = (item: any) => {
+        i18n.locale = item.code;
+        appSetting.toggleLanguage(item);
+    };
+    const currentFlag = computed(() => {
+        return `/assets/images/flags/${i18n.locale.toUpperCase()}.svg`;
+    });
+
+    const authStore = useAuthStore();
+
+    const form = ref({
+        email: '',
+        password: '',
+    });
+</script>
+
 <template>
     <div>
         <div class="absolute inset-0">
@@ -76,11 +115,17 @@
                             <h1 class="text-3xl font-extrabold uppercase !leading-snug text-primary md:text-4xl">Sign in</h1>
                             <p class="text-base font-bold leading-normal text-white-dark">Enter your email and password to login</p>
                         </div>
-                        <form class="space-y-5 dark:text-white" @submit.prevent="router.push('/')">
+                        <form class="space-y-5 dark:text-white" @submit.prevent="authStore.handleLogin(form)">
                             <div>
                                 <label for="Email">Email</label>
                                 <div class="relative text-white-dark">
-                                    <input id="Email" type="email" placeholder="Enter Email" class="form-input ps-10 placeholder:text-white-dark" />
+                                    <input
+                                        v-model="form.email"
+                                        id="Email"
+                                        type="email"
+                                        placeholder="Enter Email"
+                                        class="form-input ps-10 placeholder:text-white-dark"
+                                    />
                                     <span class="absolute start-4 top-1/2 -translate-y-1/2">
                                         <icon-mail :fill="true" />
                                     </span>
@@ -89,7 +134,13 @@
                             <div>
                                 <label for="Password">Password</label>
                                 <div class="relative text-white-dark">
-                                    <input id="Password" type="password" placeholder="Enter Password" class="form-input ps-10 placeholder:text-white-dark" />
+                                    <input
+                                        v-model="form.password"
+                                        id="Password"
+                                        type="password"
+                                        placeholder="Enter Password"
+                                        class="form-input ps-10 placeholder:text-white-dark"
+                                    />
                                     <span class="absolute start-4 top-1/2 -translate-y-1/2">
                                         <icon-lock-dots :fill="true" />
                                     </span>
@@ -163,32 +214,3 @@
         </div>
     </div>
 </template>
-<script lang="ts" setup>
-    import { computed, reactive } from 'vue';
-    import { useI18n } from 'vue-i18n';
-    import appSetting from '@/app-setting';
-    import { useAppStore } from '@/stores/index';
-    import { useRouter } from 'vue-router';
-    import { useMeta } from '@/composables/use-meta';
-
-    import IconCaretDown from '@/components/icon/icon-caret-down.vue';
-    import IconMail from '@/components/icon/icon-mail.vue';
-    import IconLockDots from '@/components/icon/icon-lock-dots.vue';
-    import IconInstagram from '@/components/icon/icon-instagram.vue';
-    import IconFacebookCircle from '@/components/icon/icon-facebook-circle.vue';
-    import IconTwitter from '@/components/icon/icon-twitter.vue';
-    import IconGoogle from '@/components/icon/icon-google.vue';
-
-    useMeta({ title: 'Login Cover' });
-    const router = useRouter();
-    const store = useAppStore();
-    // multi language
-    const i18n = reactive(useI18n());
-    const changeLanguage = (item: any) => {
-        i18n.locale = item.code;
-        appSetting.toggleLanguage(item);
-    };
-    const currentFlag = computed(() => {
-        return `/assets/images/flags/${i18n.locale.toUpperCase()}.svg`;
-    });
-</script>

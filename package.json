@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@vueuse/head": "^0.9.7",
+    "axios": "^1.6.2",
     "pinia": "^2.0.22",
     "vue": "^3.2.37",
     "vue-height-collapsible": "^0.1.1",
